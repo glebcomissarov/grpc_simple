@@ -1,0 +1,22 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+// REQUEST:
+message get_req {
+    uint32 bank_id = 1;
+    string day = 2;  // format: YYYY-MM-DD (2023-05-01)
+}
+
+// RESPONSE:
+message DataFrame {
+    string name = 1;  // name of the dataframe
+    google.protobuf.Timestamp date_sent = 2;  // datetime of the request
+    // string schema = 3;  // expected fields
+    bytes bin_table = 3;  // binary parquet file
+}
+
+// SERVICE:
+service ReturnPurchases {
+    // stream 3 tables (dataframes)
+    rpc return_data(get_req) returns (stream DataFrame);
+}
